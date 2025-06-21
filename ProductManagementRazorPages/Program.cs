@@ -1,3 +1,5 @@
+using ProductManagementRazorPages.Service.Interface;
+using ProductManagementRazorPages.Service;
 namespace ProductManagementRazorPages
 {
 	public class Program
@@ -8,8 +10,11 @@ namespace ProductManagementRazorPages
 
 			// Add services to the container.
 			builder.Services.AddRazorPages();
-
-			var app = builder.Build();
+            builder.Services.AddHttpClient<ICosmeticService, CosmeticService>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7298");
+            });
+            var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (!app.Environment.IsDevelopment())
@@ -27,8 +32,14 @@ namespace ProductManagementRazorPages
 			app.UseAuthorization();
 
 			app.MapRazorPages();
+            app.MapGet("/", context =>
+            {
+                context.Response.Redirect("/Login");
+                return Task.CompletedTask;
+            });
 
-			app.Run();
+
+            app.Run();
 		}
 	}
 }

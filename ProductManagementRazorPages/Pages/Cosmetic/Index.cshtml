@@ -1,0 +1,96 @@
+﻿@page
+@model ProductManagementRazorPages.Pages.Cosmetic.IndexModel
+
+@{
+    ViewData["Title"] = "Cosmetic List";
+    var role = Model.UserRole;
+}
+
+<h1 class="mb-4">Cosmetic List</h1>
+
+@if (role == "1" || role == "3" || role == "4")
+{
+    <form method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="SearchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Search by name or skin type..." />
+            <button type="submit" class="btn btn-outline-secondary">Search</button>
+        </div>
+    </form>
+}
+
+@if (role == "1")
+{
+    <p>
+        <a asp-page="Create" class="btn btn-primary">Create New</a>
+    </p>
+    <p>
+        <a asp-page="/Category/Index" class="btn btn-primary">View Category</a>
+    </p>
+}
+@if (!Model.HasPermission)
+{
+    <div class="alert alert-danger">
+        You do not have permission to view this page.
+    </div>
+}
+else
+{
+@if (Model.CosmeticInformation?.Any() == true)
+{
+    <table class="table table-striped table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.CosmeticInformation[0].CosmeticName)</th>
+                <th>@Html.DisplayNameFor(model => model.CosmeticInformation[0].SkinType)</th>
+                <th>@Html.DisplayNameFor(model => model.CosmeticInformation[0].ExpirationDate)</th>
+                <th>@Html.DisplayNameFor(model => model.CosmeticInformation[0].CosmeticSize)</th>
+                <th>@Html.DisplayNameFor(model => model.CosmeticInformation[0].DollarPrice)</th>
+                <th>@Html.DisplayNameFor(model => model.CosmeticInformation[0].Category.CategoryName)</th>
+                @if (role == "1")
+                {
+                    <th>Actions</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CosmeticInformation)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.CosmeticName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SkinType)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ExpirationDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CosmeticSize)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DollarPrice)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Category.CategoryName)</td>
+                    @if (role == "1")
+                    {
+                        <td>
+                            <a asp-page="./Edit" asp-route-id="@item.CosmeticId" class="btn btn-sm btn-warning">Edit</a>
+                            <a asp-page="./Details" asp-route-id="@item.CosmeticId" class="btn btn-sm btn-info text-white">Details</a>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="deleteItem('@item.CosmeticId')">Delete</button>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+        <form method="post" id="deleteForm" asp-page-handler="Delete">
+            <input type="hidden" name="cosmeticId" id="cosmeticIdToDelete" />
+        </form>
+
+}
+else
+{
+    <div class="alert alert-info">No cosmetics available.</div>
+}
+}
+@section Scripts {
+    <script>
+        function deleteItem(id) {
+            if (confirm("Are you sure you want to delete this cosmetic?")) {
+                document.getElementById("cosmeticIdToDelete").value = id;
+                document.getElementById("deleteForm").submit();
+            }
+        }
+    </script>
+}

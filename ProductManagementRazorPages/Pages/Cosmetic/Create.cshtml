@@ -1,0 +1,58 @@
+﻿@page
+@model ProductManagementRazorPages.Pages.Cosmetic.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1 class="mb-4">Create Cosmetic</h1>
+
+<form method="post" class="border p-4 rounded shadow-sm bg-light">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <div class="form-group mb-3">
+        <label asp-for="Cosmetic.CosmeticId" class="form-label"></label>
+        <input asp-for="Cosmetic.CosmeticId" class="form-control" />
+        <span asp-validation-for="Cosmetic.CosmeticId" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Cosmetic.CosmeticName" class="form-label"></label>
+        <input asp-for="Cosmetic.CosmeticName" class="form-control" />
+        <span asp-validation-for="Cosmetic.CosmeticName" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Cosmetic.SkinType" class="form-label"></label>
+        <input asp-for="Cosmetic.SkinType" class="form-control" />
+        <span asp-validation-for="Cosmetic.SkinType" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Cosmetic.ExpirationDate" class="form-label"></label>
+        <input asp-for="Cosmetic.ExpirationDate" class="form-control" type="date" />
+        <span asp-validation-for="Cosmetic.ExpirationDate" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Cosmetic.CosmeticSize" class="form-label"></label>
+        <input asp-for="Cosmetic.CosmeticSize" class="form-control" />
+        <span asp-validation-for="Cosmetic.CosmeticSize" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Cosmetic.DollarPrice" class="form-label"></label>
+        <input asp-for="Cosmetic.DollarPrice" class="form-control" />
+        <span asp-validation-for="Cosmetic.DollarPrice" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-4">
+        <label asp-for="Cosmetic.CategoryId" class="form-label">Category Name</label>
+        <select asp-for="Cosmetic.CategoryId" class="form-select" asp-items="@(ViewData["Category"] as SelectList)">
+        </select>
+        <span asp-validation-for="Cosmetic.CategoryId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-success" />
+        <a asp-page="Index" class="btn btn-secondary ms-2">Back to List</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
